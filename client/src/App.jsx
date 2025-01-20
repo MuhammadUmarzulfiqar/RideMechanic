@@ -15,7 +15,7 @@ import Register from "./pages/Register";
 import DriverCard from "./components/DriverCard";
 import Dashboard from "./pages/Dashboard";
 import CarListDashboard from "./Admin/Cars";
-import TourPackageForm from "./Admin/TourForm";
+import TourCustomerForm from "./pages/TourCustomerForm.jsx";
 import GetPackageList from "./pages/GetPackage.jsx";
 import BookingList from "./Admin/BookingList";
 import Sidebar from "./pages/Sidebar";
@@ -35,11 +35,18 @@ import CarPage from "./components/CarPage";
 import Booking from "./components/Booking";
 import ReviewForm from "./components/ReviewForm";
 import Chat from "./components/Chat";
+import GetBookingsByEmail from "./components/GetBookingsByEmail";
 import EditCar from "./Admin/EditCar";
+import BookingTourPackages from "./Admin/BookingTourPackages";
 import Confirmation from "./components/Confirmation";
 import PackageList from "./Admin/PackageList.jsx";
 import UploadPackage from "./Admin/UploadPackage.jsx";
+import PaymentWrapper from "./pages/PaymentWrapper.jsx";
 import ProtectedRoute from "./pages/ProtectedRoutes.jsx";
+import CarForm from "./Admin/CarForm";
+import Mechanics from "./pages/Mechanics.jsx";
+BookedTourPackageList;
+import BookedTourPackageList from "./pages/BookedTourPackage.jsx";
 function App() {
   const rentalId = "unique-rental-id"; // Replace with actual rentalIdTourPackageForm
   const user = "carOwner"; // or 'renter', based on the current user1.0.6
@@ -147,8 +154,8 @@ function App() {
           element: <Chat rentalId={rentalId} user={user} />,
         },
         {
-          path: "/Dashboard",
-          element: <Dashboard />,
+          path: "/dashboard",
+          element: <ProtectedRoute element={<Dashboard />} requiredRole="admin" />,
         },
         {
           path: "/cars",
@@ -162,6 +169,11 @@ function App() {
           path: "/Sidebar",
           element: <Sidebar />,
         },
+        ,
+        {
+          path: "/addCar",
+          element: <CarForm />,
+        },
         {
           path: "/edit-car/:id",
           element: <EditCar />,
@@ -171,7 +183,6 @@ function App() {
         { path: "/reports", element: <Reports /> },
         { path: "/maintenance", element: <MaintenanceSchedule /> },
         ,
-        { path: "/tourPackages", element: <TourPackageForm /> },
         {
           path: "/track-location/:carId",
           element: <TrackingPage />,
@@ -187,6 +198,29 @@ function App() {
         {
           path: "/getpackageList",
           element: <GetPackageList />,
+        },
+        {
+          path: "/tourPackagePayment",
+          element: <PaymentWrapper />,
+        },
+        {
+          path: "/tourCustomerForm",
+          element: <TourCustomerForm />,
+        },
+        {
+          path: "/getBookingByEmail",
+          element: <GetBookingsByEmail />,
+        },
+        {
+          path: "/mechanics",
+          element: <Mechanics />,
+        },
+        {
+          path: "//tour/list",
+          element: <BookedTourPackageList />,
+        },{
+          path: "/bookingPackages",
+          element: <BookingTourPackages />,
         },
       ],
     },

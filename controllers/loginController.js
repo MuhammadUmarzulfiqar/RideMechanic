@@ -25,19 +25,68 @@ export const login = async (req, res) => {
       email: user.email,
       name: user.name,
       role: user.role,
+      title: user.title,
+      speciality: user.speciality,
+      userType: user.userType,
     },
   });
   console.log(req.user);
 };
 
+export const resetPassword = async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+
+    // Step 1: Validate inputs
+    if (!email || !newPassword) {
+      return res.status(400).json({ msg: "Email and new password are required" }); // 400 for Bad Request
+    }
+
+    // Step 2: Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ msg: "User with this email does not exist" }); // 404 for Not Found
+    }
+
+    // Step 3: Hash the new password
+    const salt = await bcryptjs.genSalt(10);
+    const hashedPassword = await bcryptjs.hash(newPassword, salt);
+
+    // Step 4: Update the user's password
+    user.password = hashedPassword;
+    await user.save();
+
+    // Step 5: Send response
+    res.status(200).json({ msg: "Password reset successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Server Error. Please try again later." });
+  }
+};
+
 export const register = async (req, res) => {
-  const isFirstAccount = (await User.countDocuments()) === 0;
-  req.body.role = isFirstAccount ? "admin" : "user";
-  const salt = await bcryptjs.genSalt(10);
-  const hashedPassword = await bcryptjs.hash(req.body.password, salt);
-  req.body.password = hashedPassword;
-  const user = await User.create(req.body);
-  res.send({ user });
+  try {
+    const isFirstAccount = (await User.countDocuments()) === 0;
+    req.body.role = isFirstAccount ? "admin" : "user";
+
+    // Hash the password
+    const salt = await bcryptjs.genSalt(10);
+    const hashedPassword = await bcryptjs.hash(req.body.password, salt);
+
+    // Save user details and image path
+    const user = new User({
+      ...req.body,
+      password: hashedPassword,
+      image: req.file ? req.file.path : null, // Save the image path if uploaded
+    });
+
+    await user.save();
+
+    res.status(201).json({ msg: "User registered successfully", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Server Error. Please try again later." });
+  }
 };
 
 export const logout = async (req, res) => {
@@ -46,4 +95,14 @@ export const logout = async (req, res) => {
     expires: new Date(Date.now()),
   });
   res.json({ msg: "Logged Out" });
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}, "-password");
+    res.status(200).json({ users });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Server Error. Please try again later." });
+  }
 };

@@ -10,8 +10,10 @@ function Register() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
+  const userType = watch("userType");
   const token = localStorage.getItem("userinfo");
 
   useEffect(() => {
@@ -126,28 +128,28 @@ function Register() {
             />
             {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
           </div>
+
           <div>
-            <Label htmlFor="userType" value="Select user type" className="text-gray-600 font-semibold" />
-            <select id="userType" name="userType" className="mt-2 p-3 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2" {...register("userType", { required: "User type is required" })}>
+            <Label htmlFor="userType" value="Type" className="text-gray-600 font-semibold" />
+            <select disabled id="userType" name="userType" className="mt-2 p-3 w-full border bg-gray-200 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2" {...register("userType", { required: "User type is required" })}>
               <option value="" disabled selected>
                 Select a user type
               </option>
               <option value="user">User</option>
-              <option value="mechanic">Mechanic</option>
             </select>
             {errors.userType && <p className="text-red-500 text-sm">{errors.userType.message}</p>}
           </div>
 
           <div className="flex justify-between items-center">
-            <button type="submit" className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-3 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
-              Register
-            </button>
             <p className="text-sm text-gray-600">
               Already a Member?{" "}
               <Link to="/login" className="text-orange-500 font-semibold hover:text-orange-600">
                 Login
               </Link>
             </p>
+            <button type="submit" className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-3 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+              Register
+            </button>
           </div>
         </form>
       </div>

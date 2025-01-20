@@ -20,6 +20,28 @@ const UserSchema = new mongoose.Schema({
     enum: ["user", "mechanic"],
     default: "user",
   },
+  title: {
+    type: String,
+    default: null,
+  },
+  phone: {
+    type: String,
+    default: null,
+  },
+
+  speciality: {
+    type: String,
+    default: null,
+  },
+  lat: {
+    type: Number,
+    default: null, // Stores the latitude of the mechanic
+  },
+  lng: {
+    type: Number,
+    default: null, // Stores the longitude of the mechanic
+  },
+  image: { type: String, default: null },
 });
 
 const User = mongoose.model("User", UserSchema);
